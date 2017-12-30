@@ -4,7 +4,7 @@
 
 Docker es un proyecto Opensource que permite desplegar aplicaciones en contenedores. Gestiona la creación y administración de contenedores.
 
-![Docker](https://raw.githubusercontent.com/coneking/docker/desarrollo/images/docker.png "Pensamiento Docker")
+<p align="center"><img src="https://raw.githubusercontent.com/coneking/docker/desarrollo/images/docker.png" width="500" /></p>
 
 <br>
 
