@@ -13,49 +13,85 @@ Docker es un proyecto Opensource que permite desplegar aplicaciones en contenedo
 Los contenedores son una tecnología de virtualización que se basa en la ejecución de instancias de sistemas operativos desde un servidores (host) físico.
 Los contenedores utilizan las librerías, binarios, dependencias y recursos del Host local, usan una imagen base para su creación.
 
+<p align="center"><img src="https://raw.githubusercontent.com/coneking/docker/master/images/container.png" width="500" /></p>
 
-Las imagenes de los contenedores están disponibles oficialmente en http://hub.docker.com
+<br>
 
+>**Nota**: Las imagenes de los contenedores están disponibles oficialmente en https://hub.docker.com/
+
+<br>
+
+## Contenedores VS Máquinas virtuales.
+
+Los contenedores a diferencia de las máquinas virtuales corren bajo un sólo kernel, el del host donde se están ejecutando así como sus binarios y librerías.
+Por otra parte, las máquinas virtuales necesitan la instalación de un Sistema Operativo por cada una de ellas, además de algún Hypervisor que soporte multiples kernel para cada máquina virtual.
+
+<p align="center"><img src="https://raw.githubusercontent.com/coneking/docker/master/images/vm-vs-container.png" width="500" /></p>
 
 <br>
 
 # Comandos Docker:
 
 Ver las imágenes que se han descargado:
+
 	docker images
 
+
 Buscar imágenes de docker:
+	
 	docker search nombre_de_la_imagen
 
+
 Descargar una imagen:
+	
 	docker pull nombre_de_la_imagen
 
+
 Iniciar un contenedor:
+	
 	docker run nombre_de_la_imagen
-	(Se le asiganará un ID al contenedor y un nombre, por defecto si la imagen no la tenemos, la descargará)
+(Se le asiganará un ID al contenedor y un nombre, por defecto si la imagen no la tenemos, la descargará)
+
 
 Iniciar un contenedor y dejarlo activo en background:
+	
 	docker run -d nombre_de_la_imagen
 
+
 Iniciar un contenedor, dejarlo activo y darle un nombre:
+	
 	docker run -d --name "nombre" nombre_de_la_imagen
 
+
 Inspeccionar un contenedor (configuración, Ip, etc):
+	
 	docker inspect nombre_del_contendor
 
+
 Ver el log de un contenedor:
+	
 	docker logs nombre_del_contenedor
 
+
 Iniciar un contenedor con un puerto específico, ejemplo sabiendo la imagen "redis" usa el puerto 6379, usarlo através del puerto 6323
+	
 	docker run -d --name "nombre" -p 6323:6379 redis
 
+
 Iniciar un contenedor con un puero aleatorio.
+	
 	docker run -d --name "nombre" -p 6379
 
+
 Ver el puerto que tomó el contenedor:
+	
 	docker ps
-	o
+o
+	
 	docker port "nombre" 6379
+
+
+## Volumenes
 
 Al crear un contenedor la información por defecto se almacena dentro del mismo contenedor.
 Por ende si eliminamos el contenedor, la data guardada se eliminará y al tratar de levantar un nuevo contenedor, no tendrá la data anterior.
