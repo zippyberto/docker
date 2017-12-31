@@ -10,7 +10,7 @@ Docker es un proyecto Opensource que permite desplegar aplicaciones en contenedo
 
 ## ¿Qué son los contenedores?
 
-Los contenedores son una tecnología de virtualización que se basa en la ejecución de instancias de sistemas operativos desde un servidores (host) físico.
+Los contenedores son una tecnología de virtualización que se basa en la ejecución de instancias de sistemas operativos desde un servidor (host) físico.
 Los contenedores utilizan las librerías, binarios, dependencias y recursos del Host local, usan una imagen base para su creación.
 
 <p align="center"><img src="https://raw.githubusercontent.com/coneking/docker/master/images/container.png" width="500" /></p>
@@ -23,10 +23,65 @@ Los contenedores utilizan las librerías, binarios, dependencias y recursos del 
 
 ## Contenedores VS Máquinas virtuales.
 
-Los contenedores a diferencia de las máquinas virtuales corren bajo un sólo kernel, el del host donde se están ejecutando así como sus binarios y librerías.
+Los contenedores a diferencia de las máquinas virtuales corren bajo un sólo kernel, el del host donde se están ejecutando, así como sus binarios y librerías.
 Por otra parte, las máquinas virtuales necesitan la instalación de un Sistema Operativo por cada una de ellas, además de algún Hypervisor que soporte multiples kernel para cada máquina virtual.
 
-<p align="center"><img src="https://raw.githubusercontent.com/coneking/docker/master/images/vm-vs-container.png" width="500" /></p>
+<p align="center"><img src="https://raw.githubusercontent.com/coneking/docker/desarrollo/images/vm-vs-container.png" width="500" /></p>
+
+<br>
+
+## Componentes de Docker
+
+* [Docker Daemon](#docker-daemon)
+* [Docker Client](#docker-client)
+* [Docker Image](#docker-image)
+* [Docker Hub](#docker-hub)
+* [Dockerfile](#dockerfile)
+* [Docker Container](#docker-container)
+* [Docker Registry](#docker-registry)
+* [Docker Swarm](#docker-swarm)
+
+
+
+### Docker Daemon
+
+Es el principal proceso de Docker. Se ejecuta en el host principal y el usuario no tiene interacción directa con el demonio, sino a través del cliente.
+
+
+### Docker Client
+
+Acepta la ejecución de comandos provenientes del usuario y los comunica con el demonio de Docker mediante la interface de línea de comandos.
+
+
+### Docker Image
+
+Las imágenes son templates que contienen toda la data que se requiere para hacer correr un contenedor.
+Las imágenes están disponibles en https://hub.docker.com/, a su vez, se pueden crear imágenes propias y publicarlas en la misma página o utilizarlas localmente.
+
+
+### Docker Hub
+
+Es la plataforma oficial, la cual ofrece un repositorio centralizado para compartir y administrar imágenes de Docker.
+
+
+### Dockerfile
+
+Es un archivo que contiene toda la información para crear una imagen. El archivo es de texto plano y sigue una secuencia de comandos declarados comenzando por la sentencia "FROM".
+
+
+### Docker Container
+
+Contiene todo lo necesario para que una aplicación pueda ejecutarse. Los contenedores se crean a partir de una imagen de Docker.
+
+
+### Docker Registry
+
+Sirve para almacenar las imágenes de los contenedores que hemos creado, ya sea, de forma pública o privada.
+
+
+### Docker Swarm
+
+Se utiliza para implementar un contenedor Docker en un entorno clusterizado.
 
 <br>
 
@@ -50,7 +105,7 @@ Descargar una imagen:
 Iniciar un contenedor:
 	
 	docker run nombre_de_la_imagen
-(Se le asiganará un ID al contenedor y un nombre, por defecto si la imagen no la tenemos, la descargará)
+(Se le asignará un ID al contenedor y un nombre, por defecto si la imagen no la tenemos, la descargará)
 
 
 Iniciar un contenedor y dejarlo activo en background:
@@ -73,7 +128,7 @@ Ver el log de un contenedor:
 	docker logs nombre_del_contenedor
 
 
-Iniciar un contenedor con un puerto específico, ejemplo sabiendo la imagen "redis" usa el puerto 6379, usarlo através del puerto 6323
+Iniciar un contenedor con un puerto específico, ejemplo sabiendo la imagen "redis" usa el puerto 6379, usarlo a través del puerto 6323
 	
 	docker run -d --name "nombre" -p 6323:6379 redis
 
@@ -90,13 +145,14 @@ o
 	
 	docker port "nombre" 6379
 
+<br>
 
-## Volumenes
+## Volúmenes
 
 Al crear un contenedor la información por defecto se almacena dentro del mismo contenedor.
-Por ende si eliminamos el contenedor, la data guardada se eliminará y al tratar de levantar un nuevo contenedor, no tendrá la data anterior.
+Por ende, si eliminamos el contenedor, la data guardada se eliminará y al tratar de levantar un nuevo contenedor, no tendrá la data anterior.
 Para esto se puede mapear un volumen o directorio.
-Por ejemplo si en un contendor que guarda la información en el directorio "/opt/info", lo podemos mapear a un directorio local por ejemplo /var/container/info.
+Por ejemplo, si en un contendor que guarda la información en el directorio "/opt/info", lo podemos mapear a un directorio local por ejemplo /var/container/info.
 Con esto si eliminamos el contenedor, la data seguirá existiendo en el S.O en la ruta local /var/container/info y al crear un nuevo contenedor y mapearlo, seguirá ocupando la información de antes.
 
 	docker run -d --name "nombre" -v "/var/container/info:/opt/info" nombre_del_contenedor
@@ -114,6 +170,8 @@ Ejemplo:
 Para crear un contenedor e ingresar a él, se puede crear de forma interactiva con la opción "-i -t" o "-it". Ejemplo:
 	docker run -it --name "nombre" ubuntu /bash
 
+<br>
+
 ## Dockerfile
 
 Dockerfile nos permite crear una imagen en base a una imagen base.
@@ -127,29 +185,33 @@ Ejemplo dockerfile:
 	CMD ["nginx", "-g", "daemon off;"]
 
 
-FROM: imagen base que se usará
-COPY: copia elementos "origen", "destino"... Si se trata de un archivo, se debe especificar el nombre del archivo destino.
-EXPOSE: Indica el puerto o puertos o rango de puertos que se expondrán en la imagen
-CMD: describe una secuencia de comandos que se ejecutarán al lanzar el contenedor que se cree con esta imagen.
-RUN: pasos que se ejecutarán en la imagen antes de crearse.
-WORKDIR: directorio en el que se ejecutarán los comandos
+**FROM:** Imagen base que se usará
+**COPY:** Copia elementos "origen", "destino"... Si se trata de un archivo, se debe especificar el nombre del archivo destino.
+**EXPOSE:** Indica el puerto o puertos o rango de puertos que se expondrán en la imagen
+**CMD:** Describe una secuencia de comandos que se ejecutarán al lanzar el contenedor que se cree con esta imagen.
+**RUN:** Pasos que se ejecutarán en la imagen antes de crearse.
+**WORKDIR:** Directorio en el que se ejecutarán los comandos
 
 
 Para crear la imagen se ejecuta el comando:
 
 	docker build -t "nombre_image_nueva"
 
-La opción "-t" es para poder darle un nombre a la nueva imagen, a su vez, el nombre de la imagen se le puede agregar un "tag" para especificar su versión; mi_imagen:v1
+La opción `-t` es para poder darle un nombre a la nueva imagen, a su vez, el nombre de la imagen se le puede agregar un "tag" para especificar su versión; mi_imagen:v1
 
 
-Si sequiere agregar una variable al contenedor antes de ejecutarlo, se puede agregar la opción "-e" seguido de la variable y su contenido.
+Si se quiere agregar una variable al contenedor antes de ejecutarlo, se puede agregar la opción "-e" seguido de la variable y su contenido.
 Ejemplo:
 
 	docker run -d --name my-production-running-app -e NODE_ENV=production -p 3000:3000 my-image-nodejs-app
 
 
-Para ignorar archivo o directorios que no se quieran incluir en la imagen a crear, se deben agregar al archivo ".dockerignore" (similar a .gitignore).
+## Dockerignore
 
+Para ignorar archivos o directorios que no se quieran incluir en la imagen a crear, se deben agregar al archivo `.dockerignore` (similar a .gitignore).
+
+
+## Docker Network
 
 Crear una red docker, una red sirve para generar un puente del cual varios otros contenedores se conectarán y obtendrán ip, además de resolver por el nombre con el que se crearon los contenedores.
 Ejemplo:
@@ -165,8 +227,7 @@ Ahora crearemos dos contenedores asociándolos a la red "backend-network" a part
 	docker run -d --name=test --net=backend-network redis
 
 
-
-Ambos contenedores están corriendo en background y si creamos un nuevo contenedor que esté dentro del mismo puente y genere un ping a uno de los contenedores "redis" o "test" este deberá responder
+Ambos contenedores están corriendo en background y si creamos un nuevo contenedor que esté dentro del mismo puente y genere un ping a uno de los contenedores "redis" o "test" este deberá responder.
 
 	docker run --net=backend-network alpine ping -c1 test
 	PING test (172.19.0.3): 56 data bytes
@@ -178,6 +239,7 @@ Ambos contenedores están corriendo en background y si creamos un nuevo contened
 
 Esto sucede porque al crear un contenedor y asociarlo a un puente, se guardará en el resolv.conf de los contenedores un servidores DNS 127.0.0.11. Hacer un ping a "redis" es lo mismo que a "redis.backend-network".
 Se pueden crear multiples redes e interconectar contenedores de distintas redes entre si.
+
 Ejemplo:
 
 Crearemos una red nueva:
@@ -190,13 +252,15 @@ Ahora usaremos el comando "connect" para adjuntar un contenedor ya existente a l
 	docker network connect frontend-network redis
 
 
-Si creamos un nuevo contenedor, web en este caso, y lo adjuntamos a la misma red que se podrá comunicar con la instanacia "redis" que se creó anteriormente.
+Si creamos un nuevo contenedor, web en este caso, y lo adjuntamos a la misma red que se podrá comunicar con la instancia "redis" que se creó anteriormente.
 
 	docker run -d -p 3000:3000 --net=frontend-network katacoda/redis-node-docker-example
+
 
 Consultamos con curl:
 	
 	curl docker:3000
+
 
 Las redes se pueden listar y al igual que un contenedor se puede inspeccionar con los comandos:
 
@@ -214,7 +278,7 @@ Por ejemplo crearemos una nueva red y le conectaremos nuestro contenedor llamado
 Si inspeccionamos el contenedor redis veremos que aparte del id que le entrega docker, también tiene el alias "db" que le proporcionamos con docker network.
 
 	docker inspect redis
---> Salida
+	--> Salida
 	"frontend-network2": {
                     "IPAMConfig": {},
                     "Links": null,
@@ -233,7 +297,6 @@ Ahora si creamos un contenedor alpine con la nueva red y hacemos un ping al alia
 	--- db ping statistics ---
 	1 packets transmitted, 1 packets received, 0% packet loss
 	round-trip min/avg/max = 0.084/0.084/0.084 ms	
-
 
 
 De la misma forma en que se conectan contenedores a una red, también se pueden desconectar.
